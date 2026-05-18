@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOIDWEAR — Elevated Streetwear</title>
+<style>
+
+    html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.6;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease, width 0.2s ease, height 0.2s ease, background 0.2s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor.hover { width: 40px; height: 40px; background: var(--white); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 3rem;
+    mix-blend-mode: difference;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: 0.15em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+  .nav-icons { display: flex; gap: 1.5rem; align-items: center; }
+  .nav-icon {
+    color: var(--white); text-decoration: none; opacity: 0.6;
+    transition: opacity 0.2s; font-size: 0.75rem;
+    font-family: var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .nav-icon:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column;
+    justify-content: flex-end;
+    padding: 8rem 3rem 5rem;
+    position: relative; z-index: 2;
+  }
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 10vw, 10rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-title span { color: var(--accent); display: block; }
+  .hero-subtitle {
+    margin-top: 2rem;
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 320px;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+  .hero-cta-group {
+    display: flex; gap: 1rem; margin-top: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--black);
+    padding: 1rem 2.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none; cursor: none;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(200,255,0,0.3); }
+  .btn-outline {
+    border: 1px solid var(--dim);
+    color: var(--white);
+    padding: 1rem 2.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--white); color: var(--white); }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-shape {
+    width: 70%; aspect-ratio: 3/4;
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeIn 1s 0.4s forwards;
+  }
+  .hero-shape::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 40px,
+        rgba(200,255,0,0.03) 40px,
+        rgba(200,255,0,0.03) 41px
+      );
+  }
+  .hero-img-placeholder {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1rem;
+  }
+  .big-letter {
+    font-family: var(--font-display);
+    font-size: 20rem;
+    line-height: 1;
+    color: rgba(255,255,255,0.04);
+    user-select: none;
+  }
+  .hero-badge {
+    position: absolute;
+    bottom: 3rem; right: -1rem;
+    background: var(--accent);
+    color: var(--black);
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.2rem;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+  }
+  .hero-number {
+    position: absolute;
+    top: 2rem; left: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left: 3rem;
+    display: flex; align-items: center; gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.2s forwards;
+  }
+  .scroll-line {
+    width: 40px; height: 1px; background: var(--dim);
+    position: relative; overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--accent);
+    animation: slideLine 2s 2s infinite;
+  }
+  .scroll-text {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--accent);
+    overflow: hidden;
+    padding: 0.9rem 0;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-flex;
+    animation: marquee 20s linear infinite;
+  }
+  .marquee-item {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+    color: var(--black);
+    padding: 0 2rem;
+  }
+  .marquee-dot {
+    color: var(--black);
+    opacity: 0.4;
+    margin: 0 0.5rem;
+  }
+
+  /* SECTION */
+  section { padding: 7rem 3rem; }
+
+  .section-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid var(--mid);
+    padding-bottom: 1.5rem;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .section-link {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--dim);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .section-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* FEATURED HERO PRODUCTS */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 1.5rem;
+  }
+  .product-card {
+    position: relative; overflow: hidden; cursor: none;
+    background: var(--dark);
+  }
+  .product-card:hover .product-img { transform: scale(1.04); }
+  .product-img {
+    width: 100%; aspect-ratio: 3/4;
+    background: var(--off-black);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .product-img-inner {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative;
+  }
+  .product-letter {
+    font-family: var(--font-display);
+    color: rgba(255,255,255,0.05);
+    line-height: 1;
+    position: absolute;
+    user-select: none;
+  }
+  .product-icon {
+    width: 60%; aspect-ratio: 1;
+    position: relative; z-index: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .product-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+    padding: 2rem 1.5rem 1.5rem;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .product-card:hover .product-overlay { transform: translateY(0); opacity: 1; }
+  .product-info { padding: 1.2rem 0; display: flex; justify-content: space-between; align-items: center; }
+  .product-name {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+  }
+  .product-price {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+  .product-meta {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  .featured-side {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .product-card.sm .product-img { aspect-ratio: 4/3; }
+
+  /* NEW ARRIVALS GRID */
+  .arrivals-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+  .arrival-card {
+    cursor: none;
+  }
+  .arrival-img {
+    aspect-ratio: 2/3;
+    background: var(--dark);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+    margin-bottom: 1rem;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .arrival-card:hover .arrival-img { transform: scale(1.03); }
+  .arrival-tag {
+    position: absolute; top: 1rem; left: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: var(--accent2);
+    color: var(--white);
+    padding: 0.3rem 0.6rem;
+  }
+  .arrival-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.3rem;
+  }
+  .arrival-price {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+  .arrival-sub {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 0.2rem;
+  }
+
+  /* BANNER */
+  .banner {
+    background: var(--accent);
+    padding: 6rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  .banner-title {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 7vw, 7rem);
+    line-height: 0.9;
+    color: var(--black);
+    letter-spacing: 0.02em;
+  }
+  .banner-right { color: var(--black); }
+  .banner-body {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(0,0,0,0.6);
+    margin-bottom: 2rem;
+    max-width: 380px;
+  }
+  .btn-dark {
+    background: var(--black);
+    color: var(--white);
+    padding: 1rem 2.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none; cursor: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .btn-dark:hover { transform: translateY(-2px); }
+
+  /* STATS */
+  .stats-section {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--mid);
+    border-bottom: 1px solid var(--mid);
+  }
+  .stat-item {
+    padding: 3rem;
+    border-right: 1px solid var(--mid);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    color: var(--accent);
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    display: block;
+  }
+
+  /* CATEGORIES */
+  .cats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--mid);
+    border: 1px solid var(--mid);
+  }
+  .cat-item {
+    background: var(--black);
+    padding: 4rem 2.5rem;
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .cat-item:hover { background: var(--off-black); }
+  .cat-item:hover .cat-arrow { transform: translate(4px, -4px); color: var(--accent); }
+  .cat-num {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    margin-bottom: 2rem;
+  }
+  .cat-name {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+  .cat-count {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+  .cat-arrow {
+    font-size: 1.5rem;
+    color: var(--dim);
+    transition: transform 0.3s, color 0.3s;
+    display: block;
+  }
+  .cat-bg-letter {
+    position: absolute;
+    right: -1rem; bottom: -2rem;
+    font-family: var(--font-display);
+    font-size: 10rem;
+    color: rgba(255,255,255,0.02);
+    user-select: none;
+    line-height: 1;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--off-black);
+    padding: 5rem 3rem 2rem;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 5rem;
+  }
+  .footer-brand {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .footer-tagline {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 240px;
+  }
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 1.5rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.8rem; }
+  .footer-col ul li a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--mid);
+  }
+  .footer-copy {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+  .footer-socials { display: flex; gap: 1.5rem; }
+  .footer-socials a {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-socials a:hover { color: var(--accent); }
+
+  /* WISHLIST CART BADGE */
+  .nav-badge {
+    background: var(--accent2);
+    color: white;
+    font-size: 0.5rem;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 14px; height: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-left: 2px;
+    vertical-align: super;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes slideLine {
+    from { left: -100%; }
+    to { left: 100%; }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* SVG clothing icons */
+  .cloth-svg { opacity: 0.15; }
+
+  /* reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* mobile minimal */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 8rem 1.5rem 4rem; }
+    section { padding: 5rem 1.5rem; }
+    .featured-grid { grid-template-columns: 1fr; }
+    .arrivals-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-section { grid-template-columns: repeat(2, 1fr); }
+    .cats-grid { grid-template-columns: 1fr; }
+    .banner { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    body { cursor: auto; }
+    .cursor { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">VOIDWEAR</a>
+  <ul class="nav-links">
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#new">New Arrivals</a></li>
+    <li><a href="#categories">Shop</a></li>
+    <li><a href="#">Lookbook</a></li>
+    <li><a href="#">Stores</a></li>
+  </ul>
+  <div class="nav-icons">
+    <a href="#" class="nav-icon">Search</a>
+    <a href="#" class="nav-icon">Wishlist <span class="nav-badge">2</span></a>
+    <a href="#" class="nav-icon">Cart <span class="nav-badge">1</span></a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding: 0;">
+  <div class="hero-left">
+    <p class="hero-tag">SS 2026 — New Collection</p>
+    <h1 class="hero-title">
+      WEAR
+      <span>THE</span>
+      VOID
+    </h1>
+    <p class="hero-subtitle">Crafted for those who exist between worlds. Elevated basics, deconstructed silhouettes, zero compromise.</p>
+    <div class="hero-cta-group">
+      <a href="#collections" class="btn-primary">Shop Collection</a>
+      <a href="#" class="btn-outline">Lookbook 2026</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-bg">
+      <div class="hero-shape">
+        <div class="hero-img-placeholder">
+          <div class="big-letter">V</div>
+          <svg width="45%" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg" class="cloth-svg" style="opacity:0.18; position:relative; z-index:1;">
+            <path d="M70 20 L20 60 L40 70 L30 200 L170 200 L160 70 L180 60 L130 20 C120 40 80 40 70 20Z" stroke="#c8ff00" stroke-width="2" fill="rgba(200,255,0,0.04)"/>
+            <path d="M70 20 C75 55 100 60 100 60 C100 60 125 55 130 20" stroke="#c8ff00" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div class="hero-number">001 / DROP01</div>
+        <div class="hero-badge">Drop 01 — 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll to explore</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span class="marquee-item">Drop Shoulders</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Oversized Tees</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Wide-Leg Denim</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Utility Cargo</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Premium Hoodies</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Elevated Streetwear</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Drop Shoulders</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Oversized Tees</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Wide-Leg Denim</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Utility Cargo</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Premium Hoodies</span><span class="marquee-dot">✦</span>
+    <span class="marquee-item">Elevated Streetwear</span><span class="marquee-dot">✦</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-section reveal">
+  <div class="stat-item">
+    <span class="stat-num">12K+</span>
+    <span class="stat-label">Pieces Sold</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">48</span>
+    <span class="stat-label">Active Styles</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">19</span>
+    <span class="stat-label">Countries</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num">100%</span>
+    <span class="stat-label">Ethical Production</span>
+  </div>
+</div>
+
+<!-- FEATURED COLLECTIONS -->
+<section id="collections">
+  <div class="section-header reveal">
+    <div>
+      <p class="section-label">Featured</p>
+      <h2 class="section-title">COLLECTIONS</h2>
+    </div>
+    <a href="#" class="section-link">View All →</a>
+  </div>
+  <div class="featured-grid reveal">
+    <div class="product-card">
+      <div class="product-img">
+        <div class="product-img-inner">
+          <span class="product-letter" style="font-size: 28rem; bottom: -4rem; right: -2rem;">D</span>
+          <svg width="45%" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative; z-index:1; opacity:0.3;">
+            <path d="M70 20 L20 60 L40 70 L30 200 L170 200 L160 70 L180 60 L130 20 C120 40 80 40 70 20Z" stroke="#c8ff00" stroke-width="2" fill="rgba(200,255,0,0.06)"/>
+            <path d="M70 20 C75 55 100 60 100 60 C100 60 125 55 130 20" stroke="#c8ff00" stroke-width="2" fill="none"/>
+            <line x1="30" y1="200" x2="30" y2="240" stroke="#c8ff00" stroke-width="2"/>
+            <line x1="170" y1="200" x2="170" y2="240" stroke="#c8ff00" stroke-width="2"/>
+            <line x1="30" y1="240" x2="170" y2="240" stroke="#c8ff00" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="product-overlay">
+          <a href="#" class="btn-primary" style="width:100%; text-align:center; display:block;">Buy Now — $89</a>
+        </div>
+      </div>
+      <div class="product-info">
+        <div>
+          <p class="product-meta">Drop Shoulders / SS2026</p>
+          <p class="product-name">VOID SHOULDER TEE</p>
+        </div>
+        <p class="product-price">$89</p>
+      </div>
+    </div>
+    <div class="featured-side">
+      <div class="product-card sm">
+        <div class="product-img">
+          <div class="product-img-inner">
+            <span class="product-letter" style="font-size: 16rem; bottom: -2rem; right: -1rem;">T</span>
+            <svg width="40%" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative; z-index:1; opacity:0.25;">
+              <path d="M70 20 L20 60 L40 70 L30 180 L170 180 L160 70 L180 60 L130 20 C120 40 80 40 70 20Z" stroke="#f4f2ee" stroke-width="2" fill="rgba(244,242,238,0.05)"/>
+              <line x1="80" y1="20" x2="80" y2="60" stroke="#f4f2ee" stroke-width="1.5"/>
+              <line x1="120" y1="20" x2="120" y2="60" stroke="#f4f2ee" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="product-overlay">
+            <a href="#" class="btn-primary" style="width:100%; text-align:center; display:block; font-size: 0.6rem; padding: 0.7rem 1rem;">Buy Now — $65</a>
+          </div>
+        </div>
+        <div class="product-info">
+          <div>
+            <p class="product-meta">Graphic Tee</p>
+            <p class="product-name">NIGHT SHIFT TEE</p>
+          </div>
+          <p class="product-price">$65</p>
+        </div>
+      </div>
+      <div class="product-card sm">
+        <div class="product-img">
+          <div class="product-img-inner">
+            <span class="product-letter" style="font-size: 16rem; bottom: -2rem; right: -1rem;">J</span>
+            <svg width="35%" viewBox="0 0 180 280" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative; z-index:1; opacity:0.25;">
+              <rect x="30" y="10" width="120" height="260" rx="4" stroke="#c8ff00" stroke-width="2" fill="rgba(200,255,0,0.04)"/>
+              <line x1="90" y1="10" x2="90" y2="270" stroke="#c8ff00" stroke-width="1.5" stroke-dasharray="8,4"/>
+              <rect x="40" y="20" width="40" height="8" rx="2" fill="rgba(200,255,0,0.2)"/>
+              <rect x="100" y="20" width="40" height="8" rx="2" fill="rgba(200,255,0,0.2)"/>
+            </svg>
+          </div>
+          <div class="product-overlay">
+            <a href="#" class="btn-primary" style="width:100%; text-align:center; display:block; font-size: 0.6rem; padding: 0.7rem 1rem;">Buy Now — $120</a>
+          </div>
+        </div>
+        <div class="product-info">
+          <div>
+            <p class="product-meta">Denim / Wide Leg</p>
+            <p class="product-name">CARGO WIDE JEAN</p>
+          </div>
+          <p class="product-price">$120</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW ARRIVALS -->
+<section id="new" style="background: var(--off-black);">
+  <div class="section-header reveal">
+    <div>
+      <p class="section-label">Just Dropped</p>
+      <h2 class="section-title">NEW ARRIVALS</h2>
+    </div>
+    <a href="#" class="section-link">See All →</a>
+  </div>
+  <div class="arrivals-grid reveal">
+    <div class="arrival-card">
+      <div class="arrival-img" style="background: #161616;">
+        <span class="arrival-tag">New</span>
+        <svg width="55%" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.25;">
+          <path d="M70 20 L20 60 L40 70 L30 200 L170 200 L160 70 L180 60 L130 20 C120 40 80 40 70 20Z" stroke="#c8ff00" stroke-width="2" fill="rgba(200,255,0,0.04)"/>
+        </svg>
+        <span style="position:absolute; font-family:var(--font-display); font-size:9rem; color:rgba(255,255,255,0.03); bottom:-1rem; right:-1rem;">V</span>
+      </div>
+      <p class="arrival-sub">Oversized / Unisex</p>
+      <p class="arrival-name">VOID HOODIE</p>
+      <p class="arrival-price">$110</p>
+    </div>
+    <div class="arrival-card">
+      <div class="arrival-img" style="background: #191510;">
+        <span class="arrival-tag" style="background: var(--accent); color: var(--black);">Hot</span>
+        <svg width="50%" viewBox="0 0 180 280" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.2;">
+          <rect x="30" y="10" width="120" height="260" rx="4" stroke="#ff4d1c" stroke-width="2" fill="rgba(255,77,28,0.05)"/>
+          <line x1="90" y1="10" x2="90" y2="270" stroke="#ff4d1c" stroke-width="1.5" stroke-dasharray="8,4"/>
+        </svg>
+        <span style="position:absolute; font-family:var(--font-display); font-size:9rem; color:rgba(255,255,255,0.03); bottom:-1rem; right:-1rem;">J</span>
+      </div>
+      <p class="arrival-sub">Denim / Baggy Fit</p>
+      <p class="arrival-name">WASHED JEANS</p>
+      <p class="arrival-price">$130</p>
+    </div>
+    <div class="arrival-card">
+      <div class="arrival-img" style="background: #0f1510;">
+        <span class="arrival-tag">New</span>
+        <svg width="60%" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.2;">
+          <path d="M70 20 L20 60 L40 70 L30 180 L170 180 L160 70 L180 60 L130 20 C120 40 80 40 70 20Z" stroke="#ffffff" stroke-width="2" fill="rgba(255,255,255,0.04)"/>
+          <rect x="60" y="80" width="80" height="60" stroke="#ffffff" stroke-width="1" fill="rgba(255,255,255,0.03)"/>
+        </svg>
+        <span style="position:absolute; font-family:var(--font-display); font-size:9rem; color:rgba(255,255,255,0.03); bottom:-1rem; right:-1rem;">L</span>
+      </div>
+      <p class="arrival-sub">Graphic Tee</p>
+      <p class="arrival-name">LOGO CROP TEE</p>
+      <p class="arrival-price">$72</p>
+    </div>
+    <div class="arrival-card">
+      <div class="arrival-img" style="background: #111115;">
+        <span class="arrival-tag" style="background: var(--accent); color: var(--black);">Limited</span>
+        <svg width="50%" viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.2;">
+          <rect x="20" y="60" width="160" height="100" rx="4" stroke="#c8ff00" stroke-width="2" fill="rgba(200,255,0,0.04)"/>
+          <path d="M50 60 L50 20 L150 20 L150 60" stroke="#c8ff00" stroke-width="2"/>
+          <line x1="20" y1="110" x2="180" y2="110" stroke="#c8ff00" stroke-width="1.5"/>
+        </svg>
+        <span style="position:absolute; font-family:var(--font-display); font-size:9rem; color:rgba(255,255,255,0.03); bottom:-1rem; right:-1rem;">C</span>
+      </div>
+      <p class="arrival-sub">Outerwear</p>
+      <p class="arrival-name">UTILITY JACKET</p>
+      <p class="arrival-price">$195</p>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER -->
+<div class="banner reveal">
+  <div>
+    <h2 class="banner-title">BUILT FOR THE STREETS</h2>
+  </div>
+  <div class="banner-right">
+    <p class="banner-body">Every piece is engineered for those who move through the world on their own terms. Premium fabrics, oversized silhouettes, no compromises.</p>
+    <a href="#categories" class="btn-dark">Explore All Styles</a>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="section-header reveal">
+    <div>
+      <p class="section-label">Browse</p>
+      <h2 class="section-title">CATEGORIES</h2>
+    </div>
+  </div>
+  <div class="cats-grid reveal">
+    <div class="cat-item">
+      <p class="cat-num">01</p>
+      <h3 class="cat-name">T-SHIRTS</h3>
+      <p class="cat-count">24 styles available</p>
+      <span class="cat-arrow">↗</span>
+      <span class="cat-bg-letter">T</span>
+    </div>
+    <div class="cat-item">
+      <p class="cat-num">02</p>
+      <h3 class="cat-name">DENIM</h3>
+      <p class="cat-count">12 styles available</p>
+      <span class="cat-arrow">↗</span>
+      <span class="cat-bg-letter">D</span>
+    </div>
+    <div class="cat-item">
+      <p class="cat-num">03</p>
+      <h3 class="cat-name">HOODIES</h3>
+      <p class="cat-count">8 styles available</p>
+      <span class="cat-arrow">↗</span>
+      <span class="cat-bg-letter">H</span>
+    </div>
+    <div class="cat-item">
+      <p class="cat-num">04</p>
+      <h3 class="cat-name">OUTERWEAR</h3>
+      <p class="cat-count">6 styles available</p>
+      <span class="cat-arrow">↗</span>
+      <span class="cat-bg-letter">O</span>
+    </div>
+    <div class="cat-item">
+      <p class="cat-num">05</p>
+      <h3 class="cat-name">CARGO</h3>
+      <p class="cat-count">10 styles available</p>
+      <span class="cat-arrow">↗</span>
+      <span class="cat-bg-letter">C</span>
+    </div>
+    <div class="cat-item">
+      <p class="cat-num">06</p>
+      <h3 class="cat-name">ACCESSORIES</h3>
+      <p class="cat-count">18 styles available</p>
+      <span class="cat-arrow">↗</span>
+      <span class="cat-bg-letter">A</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top reveal">
+    <div>
+      <div class="footer-brand">VOIDWEAR</div>
+      <p class="footer-tagline">Elevated streetwear for those who move between worlds. Crafted with intent.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">T-Shirts</a></li>
+        <li><a href="#">Denim</a></li>
+        <li><a href="#">Hoodies</a></li>
+        <li><a href="#">Outerwear</a></li>
+        <li><a href="#">Accessories</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Info</h4>
+      <ul>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Lookbook</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Sizing Guide</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 VOIDWEAR. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">Pinterest</a>
+      <a href="#">Twitter/X</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .product-card, .arrival-card, .cat-item').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
